@@ -2,7 +2,8 @@
 
 ..source :: https://github.com/perseids-project/perseids_treebanking/blob/ae0305138dacc4a89c5fe6b0f086a4b3b1efdc92/transformations/aldt-util.xsl
 """
-from .base import Token
+from .base import Token, Corpus, Sentence
+import lxml.etree as etree
 
 
 _NUMBER = {"s": "Sing", "p": "Plur"}
@@ -64,3 +65,37 @@ class LatinToken(Token):
             feats["Degree"] = _DEGREE[features[8]]
 
         return feats
+
+
+class LatinCorpus(Corpus):
+    @staticmethod
+    def parse(files):
+        """
+
+        :param files:
+        :return:
+        """
+        for file in files:
+            with open(file) as f:
+                xml = etree.parse(f)
+            for sentence in xml.xpath("//sentence"):
+                sent = []
+                for word in sentence.xpath(".//word[not(@artificial)]"):
+                    postag = word.get("postag")
+                    if not postag:
+                        if word.get("lemma") == "punc1":
+                            postag = "u--------"
+                        elif word.get("form") in ",!“":
+                            postag = "u--------"
+                        else:
+                            print(etree.tostring(word))
+                            raise ValueError("postag is empty")
+                    sent.append(LatinToken(
+                        index=word.get("id"),
+                        form=word.get("form"),
+                        lemma=word.get("lemma"),
+                        features=postag,
+                        rel=word.get("relation"),
+                        parent=word.get("head")
+                    ))
+                yield Sentence(sent)
