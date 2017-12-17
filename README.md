@@ -1,7 +1,7 @@
 # pyperseus-treebank
 
-[![Coverage Status](https://coveralls.io/repos/github/PonteIneptique/pyperseus-treebank/badge.svg?branch=master)](https://coveralls.io/github/PonteIneptique/pyperseus-treebank?branch=master)
-[![Build Status](https://travis-ci.org/PonteIneptique/pyperseus-treebank.svg?branch=master)](https://travis-ci.org/PonteIneptique/pyperseus-treebank)
+[![Coverage Status](https://coveralls.io/repos/github/alpheios-project/pyperseus-treebank/badge.svg?branch=master)](https://coveralls.io/github/alpheios-project/pyperseus-treebank?branch=master)
+[![Build Status](https://travis-ci.org/alpheios-project/pyperseus-treebank.svg?branch=master)](https://travis-ci.org/alpheios-project/pyperseus-treebank)
 [![PyPI version](https://badge.fury.io/py/pyperseus-treebank.svg)](https://badge.fury.io/py/pyperseus-treebank)
 
 This can be installed from pypi :
