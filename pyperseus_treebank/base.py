@@ -2,6 +2,18 @@ import glob
 
 
 class Token:
+    """ Token (single element in a sentence : a word or a punctuation sign)
+
+    :param index: Index of the token in the sentence
+    :param form: Form of the token in the sentence
+    :param lemma: Lemma that is attributed to the form
+    :param parent: Head word of the current token in the index, aka. token this word is dependant of
+    :param features: Features of the Token
+    :param pos: Part of Speech tag of the current Token
+    :param rel: Relation kind to the head word.
+
+    .. note:: Token can be compared (Token() == Token())
+    """
     def __init__(self, index, form, lemma, parent=0, features="", pos=None, rel="ROOT"):
         self.index = index
         self.form = form
@@ -34,6 +46,19 @@ class Token:
 
 
 class Sentence:
+    """ A sentence of treebanked data
+
+    :param words: Words of the sentence
+    :type words: [Token]
+
+    .. note:: str(Corpus()) will release in a conllu export
+
+    .. note:: len(Sentence) tells how many words there is in the sentence
+
+    .. note:: Sentence accepts comparison
+
+    .. note:: You can iter over a sentence directly [token for token in Sentenc(..)]
+    """
     def __init__(self, words):
         self.__words__ = words
 
@@ -41,8 +66,7 @@ class Sentence:
     def words(self):
         """ Words of the sentence
 
-
-        :return:
+        :return: List of sentence's token
         :rtype: [Token]
         """
         return self.__words__
@@ -80,6 +104,17 @@ class Sentence:
 
 
 class Corpus:
+    """ Corpus is a set of sentences which can be exported to Conllu
+
+    :param glob_path: Path to files that need to be parsed (Can be in the form \
+    of a glob : ./path/to/**/*.xml
+    :type glob_path: str
+
+    :attr sentences: List of sentences
+    :type sentences : [Sentence]
+
+    .. note:: str(Corpus()) will release in a conllu export
+    """
     def __init__(self, glob_path):
         self.files = glob.glob(glob_path)
         self.__sentences__ = list(self.parse(self.files))
@@ -90,6 +125,14 @@ class Corpus:
 
     @staticmethod
     def parse(files):
+        """ Parse a set of files
+
+        :param files: List of file's paths that needs to be parsed
+        :type files: str
+
+        :yields: Sentence thar were parsed
+        :ytype: Sentence
+        """
         raise NotImplementedError()
 
     def __str__(self):

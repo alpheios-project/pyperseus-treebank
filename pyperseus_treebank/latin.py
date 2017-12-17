@@ -70,11 +70,6 @@ class LatinToken(Token):
 class LatinCorpus(Corpus):
     @staticmethod
     def parse(files):
-        """
-
-        :param files:
-        :return:
-        """
         for file in files:
             with open(file) as f:
                 xml = etree.parse(f)

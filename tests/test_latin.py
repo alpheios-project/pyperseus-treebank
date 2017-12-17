@@ -70,7 +70,6 @@ class TestLatinCorpus(TestCase):
 
     def test_corpus(self):
         self.corpus = LatinCorpus("./tests/test_data/short.tb.latin.xml")
-        print(str(self.corpus))
         self.assertEqual(
             str(self.corpus),
             """1	Tantae	tantus	a	a	Case=Nom|Gender=Fem|Number=Plur	5	ATR	_	_
