@@ -4,15 +4,19 @@
 """
 from .base import Token, Corpus, Sentence
 import lxml.etree as etree
+import re
 
 
 _NUMBER = {"s": "Sing", "p": "Plur"}
-_TENSE = {"p": "Pres", "f": "Fut", "r": "Perf", "l": "PQP", "i": "Imp"}
+_TENSE = {"p": "Pres", "f": "Fut", "r": "Perf", "l": "PQP", "i": "Imp", "t": "FutPerf"}
 _MOOD = {"i": "Ind", "s": "Sub", "m": "Imp", "g": "Ger", "p": "Part", "u": "Sup", "n": "Inf"}
 _VOICE = {"a": "Act", "p": "Pass", "d": "Dep"}
 _GENDER = {"f": "Fem", "m": "Masc", "n": "Neut", "c": "Com"}
 _CASE = {"g": "Gen", "d": "Dat", "a": "Acc", "v": "Voc", "n": "Nom", "b": "Abl", "i": "Ins", "l": "Loc"}
 _DEGREE = {"p": "Pos", "c": "Comp", "s": "Sup"}
+
+
+NOTWORD = re.compile("^\W+$")
 
 
 class LatinToken(Token):
@@ -81,6 +85,8 @@ class LatinCorpus(Corpus):
                         if word.get("lemma") == "punc1":
                             postag = "u--------"
                         elif word.get("form") in ",!“":
+                            postag = "u--------"
+                        elif NOTWORD.match(word.get("form")):
                             postag = "u--------"
                         else:
                             print(etree.tostring(word))
