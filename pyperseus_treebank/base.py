@@ -1,4 +1,13 @@
 import glob
+from collections import namedtuple
+
+
+_CONLLU_CONSTANTS = namedtuple("ConlluConstants", ["alpheios", "la_conll"])
+
+CONLL_MODES = _CONLLU_CONSTANTS(
+    0,
+    1
+)
 
 
 class Token:
@@ -135,9 +144,25 @@ class Corpus:
         """
         raise NotImplementedError()
 
+    def __iter__(self):
+        for sentence in self.sentences:
+            yield sentence
+
     def __str__(self):
         """ String representation is Conllu format
 
         :rtype: str
         """
         return "\n\n".join([str(s) for s in self.sentences])
+
+    def export(self, mode=CONLL_MODES.alpheios):
+        """ Export the corpus to conllu
+
+        :param mode: A mode of export. There is different modes available in
+        CONLL_MODES
+        :return: A string conllu representation of the corpus
+        """
+        if mode == CONLL_MODES.alpheios:
+            return str(self)
+        else:
+            raise NotImplementedError("This mode was not implemented")

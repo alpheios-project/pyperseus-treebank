@@ -2,10 +2,30 @@
 
 ..source :: https://github.com/perseids-project/perseids_treebanking/blob/ae0305138dacc4a89c5fe6b0f086a4b3b1efdc92/transformations/aldt-util.xsl
 """
-from .base import Token, Corpus, Sentence
+from .base import Token, Corpus, Sentence, CONLL_MODES
 import lxml.etree as etree
 import re
 
+
+# Conversion table for CONLL
+# Thanks to @epageperron
+_CONLL_LA_CONV_DICT = {
+    "a": "ADJ",
+    "c": "CCONJ",
+    "d": "ADV",
+    "e": "INTJ",
+    "g": "PART",
+    "i": "INTJ",
+    "l": "DET",
+    "m": "NUM",
+    "n": "NOUN",
+    "p": "PRON",
+    "r": "ADP",
+    "t": "VERB",
+    "u": "PUNCT",
+    "v": "VERB",
+    "x": "X"
+}
 
 _NUMBER = {"s": "Sing", "p": "Plur"}
 _TENSE = {"p": "Pres", "f": "Fut", "r": "Perf", "l": "PQP", "i": "Imp", "t": "FutPerf"}
@@ -100,3 +120,20 @@ class LatinCorpus(Corpus):
                         parent=word.get("head")
                     ))
                 yield Sentence(sent)
+
+    def export(self, mode=CONLL_MODES.alpheios):
+        if mode == CONLL_MODES.la_conll:
+            export = []
+            for sentence in self:
+                export.append(
+                    "\n".join(
+                        "\t".join([
+                            token.index, token.form, token.lemma, _CONLL_LA_CONV_DICT[token.pos],
+                            _CONLL_LA_CONV_DICT[token.pos],
+                            sentence.str_features(token.features), token.parent, token.rel, "_", "_"
+                        ])
+                        for token in sentence
+                    ) or "_"
+                )
+            return "\n\n".join(export)
+        return super(LatinCorpus, self).export(mode)
